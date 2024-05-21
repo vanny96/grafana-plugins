@@ -168,7 +168,7 @@ func SliceToFrame(name string, input []any, columns []Column) (frame *data.Frame
 	for _, item := range input {
 		if item != nil {
 			switch item.(type) {
-			case nil, string, float64, float32, int64, int32, int16, int8, int, uint64, uint32, uint16, uint8, uint, bool, time.Time, *string, *float64, *float32, *int64, *int32, *int16, *int8, *int, *uint64, *uint32, *uint16, *uint8, *uint, *bool, *time.Time:
+			case string, float64, float32, int64, int32, int16, int8, int, uint64, uint32, uint16, uint8, uint, bool, time.Time, *string, *float64, *float32, *int64, *int32, *int16, *int8, *int, *uint64, *uint32, *uint16, *uint8, *uint, *bool, *time.Time:
 				a, _ := getFieldTypeAndValue(item)
 				field := data.NewFieldFromFieldType(a, len(input))
 				field.Name = name

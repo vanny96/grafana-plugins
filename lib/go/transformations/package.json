@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "scripts": {
     "tidy": "go mod tidy",
-    "test:backend": "go test -v  ./...",
-    "lint:backend": "golangci-lint run ./..."
+    "test:backend": "go test -v  ./..."
   }
 }

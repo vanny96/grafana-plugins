@@ -5,46 +5,31 @@
       "cache": false,
       "outputs": []
     },
-    "dev": {
-      "outputs": []
-    },
-    "watch": {
-      "inputs": ["src/*.ts", "src/**/*.tsx", "src/**/*.ts"],
-      "outputs": ["dist/**"]
-    },
-    "test": {
-      "outputs": []
-    },
     "tidy": {
       "cache": false,
       "inputs": ["go.mod"],
       "outputs": ["go.mod", "go.sum"]
     },
-    "build": {
-      "inputs": ["./lib", "./plugins"],
-      "outputs": ["dist/**", "!dist/gpx*"]
-    },
-    "ci-build": {
-      "outputs": ["dist/**"]
-    },
-    "test:backend": {
-      "inputs": ["**/*.go"],
+    "lint:backend": {
+      "cache": true,
+      "inputs": ["**/*.go", "go.mod", "go.sum"],
       "outputs": []
     },
-    "lint:backend": {
-      "inputs": ["**/*.go"],
+    "test:backend": {
+      "inputs": ["**/*.go", "go.mod", "go.sum"],
       "outputs": []
     },
     "build:backend": {
-      "inputs": ["**/*.go"],
-      "outputs": ["dist/gpx*"]
+      "cache": true
     },
-    "build:all": {
-      "dependsOn": ["build", "build:backend"]
+    "lint:frontend": {
+      "cache": true
     },
-    "sign": {
-      "cache": false,
-      "outputs": ["dist/MANIFEST.txt"]
+    "test:frontend": {
+      "cache": true
+    },
+    "build:frontend": {
+      "cache": true
     }
   }
 }

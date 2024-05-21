@@ -1,8 +1,8 @@
 module github.com/yesoreyeram/grafana-plugins/lib/go/macros
 
-go 1.21
+go 1.22
 
-toolchain go1.21.3
+toolchain go1.22.3
 
 require (
 	github.com/grafana/grafana-plugin-sdk-go v0.211.0

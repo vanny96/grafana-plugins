@@ -1,9 +1,8 @@
-go 1.21
+go 1.22
 
-toolchain go1.21.3
+toolchain go1.22.1
 
 use (
-	./
 	./lib/go/anyframer
 	./lib/go/csvframer
 	./lib/go/framesql
@@ -14,9 +13,4 @@ use (
 	./lib/go/transformations
 	./lib/go/utils
 	./lib/go/xmlframer
-	./plugins/yesoreyeram-blank-datasource
-	./plugins/yesoreyeram-hello-datasource
-	./plugins/yesoreyeram-hyperping-datasource
-	./plugins/yesoreyeram-petstore-datasource
-	./plugins/yesoreyeram-vercel-datasource
 )

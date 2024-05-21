@@ -39,7 +39,7 @@ func (options *AnyFramer) toJSONObject(input string) (any, error) {
 	}
 }
 
-func toObjectFromJSONString(jsonString string, options AnyFramer) (jsonObject any, err error) {
+func toObjectFromJSONString(jsonString string, _ AnyFramer) (jsonObject any, err error) {
 	err = json.Unmarshal([]byte(jsonString), &jsonObject)
 	if err != nil {
 		return nil, err
@@ -142,7 +142,7 @@ func toObjectFromXMLString(xmlString string, options AnyFramer) (jsonObject any,
 	return jsonObject, nil
 }
 
-func xmlContentToJSONString(xmlString string, options AnyFramer) (jsonString string, err error) {
+func xmlContentToJSONString(xmlString string, _ AnyFramer) (jsonString string, err error) {
 	xml := strings.NewReader(xmlString)
 	json, err := xj.Convert(xml)
 	if err != nil {

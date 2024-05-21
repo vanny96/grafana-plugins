@@ -1,17 +1,17 @@
 module github.com/yesoreyeram/grafana-plugins/lib/go/framesql
 
-go 1.21
+go 1.22
 
-toolchain go1.21.3
+toolchain go1.22.1
 
 require (
-	github.com/grafana/grafana-plugin-sdk-go v0.199.0
+	github.com/grafana/grafana-plugin-sdk-go v0.211.0
 	github.com/stretchr/testify v1.8.4
 	gopkg.in/Knetic/govaluate.v3 v3.0.0
 )
 
 require (
-	github.com/apache/arrow/go/v13 v13.0.0 // indirect
+	github.com/apache/arrow/go/v15 v15.0.0 // indirect
 	github.com/cheekybits/genny v1.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
@@ -30,7 +30,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
-	golang.org/x/exp v0.0.0-20230321023759-10a507213a29 // indirect
+	golang.org/x/exp v0.0.0-20231006140011-7918f672742d // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/tools v0.15.0 // indirect

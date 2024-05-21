@@ -1,4 +1,4 @@
-name: Backed libs Test, Lint and Build
+name: Backed libraries
 on:
   pull_request:
     paths:
@@ -10,27 +10,14 @@ on:
       - "lib/go/**"
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup nodejs
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.19.1
       - name: Setup Go environment
         uses: actions/setup-go@v4
         with:
-          go-version: "1.21.6"
-      - name: Install mage
-        run: |
-          go install github.com/magefile/mage@latest
-      - name: Install golangci-lint
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.53.3
-      - name: Install turbo
-        run: |
-          yarn global add turbo@1.10.6
+          go-version: "1.22.1"
       - name: Validate environment
         run: |
           echo "-------- node version -----"
@@ -41,16 +28,5 @@ jobs:
           yarn --version
           echo "-------- go version -----"
           go version
-          echo "-------- mage version -----"
-          mage --version
-          echo "-------- golangci-lint version -----"
-          golangci-lint --version
-          echo "-------- turbo version -----"
-          turbo --version
-      # # error with parallel golangci-lint is running
-      # - name: Lint backend
-      #   run: |
-      #     yarn lint:backend
       - name: Test backend
-        run: |
-          yarn test:backend
+        run: npx --package=turbo@latest -- turbo test:backend

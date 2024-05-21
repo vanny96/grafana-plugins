@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.0.2
+
+- **Chore**: Cleanup / removed plugins from the monorepo
+
 ## v0.0.1
 
 - **plugin - blank** [yesoreyeram-blank-datasource](./plugins/yesoreyeram-blank-datasource/) added
