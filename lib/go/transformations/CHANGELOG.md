@@ -1,13 +1,13 @@
 # @yesoreyeram/grafana-go-transformations
 
-## 0.0.2
+## 0.0.3
 
-### Patch Changes
+- Added new expression functions `totime` and `tomillis` (experimental)
+
+## 0.0.2
 
 - 873e734: cleanup
 
 ## 0.0.1
-
-### Patch Changes
 
 - ⚙️ **Chore**: transformations package added
