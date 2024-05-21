@@ -8,6 +8,10 @@ on:
       - main
     paths:
       - "lib/go/**"
+defaults:
+  run:
+    shell: bash
+    working-directory: ./
 jobs:
   build:
     runs-on: ubuntu-latest
