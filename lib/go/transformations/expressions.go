@@ -2,11 +2,12 @@ package transformations
 
 import (
 	"errors"
+	"strings"
+	"time"
+
 	"github.com/araddon/dateparse"
 	"github.com/google/uuid"
 	"gopkg.in/Knetic/govaluate.v3"
-	"strings"
-	"time"
 )
 
 var ExpressionFunctions = map[string]govaluate.ExpressionFunction{
@@ -186,7 +187,10 @@ var ExpressionFunctions = map[string]govaluate.ExpressionFunction{
 	},
 	"totime": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
-			return nil, errors.New("invalid arguments to todatetime method")
+			return nil, errors.New("invalid arguments to todatetime function")
+		}
+		if arguments[0] == nil {
+			return nil, errors.New("invalid argument to totime function")
 		}
 		var first *string
 		if arg, ok := arguments[0].(*string); ok {
@@ -195,15 +199,17 @@ var ExpressionFunctions = map[string]govaluate.ExpressionFunction{
 		if arg, ok := arguments[0].(string); ok {
 			first = &arg
 		}
-
 		if first != nil {
 			return dateparse.ParseAny(*first)
 		}
-		return "", nil
+		return nil, nil
 	},
 	"tomillis": func(arguments ...any) (any, error) {
 		if len(arguments) < 1 {
-			return nil, errors.New("invalid arguments to todatetime method")
+			return nil, errors.New("invalid arguments to tomillis function")
+		}
+		if arguments[0] == nil {
+			return nil, errors.New("invalid argument to tomillis function")
 		}
 		var first *time.Time
 		if arg, ok := arguments[0].(*time.Time); ok {
@@ -212,10 +218,9 @@ var ExpressionFunctions = map[string]govaluate.ExpressionFunction{
 		if arg, ok := arguments[0].(time.Time); ok {
 			first = &arg
 		}
-
 		if first != nil {
 			return first.UnixMilli(), nil
 		}
-		return "", nil
+		return nil, nil
 	},
 }
