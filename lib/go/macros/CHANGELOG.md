@@ -1,5 +1,11 @@
 # @yesoreyeram/grafana-go-macros
 
+## 0.2.1
+
+### Patch Changes
+
+- 873e734: cleanup
+
 ## 0.2.0
 
 - 🚀 Added couple of new time macro aliases `${__timeFrom}` and `${__timeTo}`

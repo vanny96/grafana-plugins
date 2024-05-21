@@ -1,5 +1,11 @@
 # @yesoreyeram/grafana-go-gframer
 
+## 0.2.1
+
+### Patch Changes
+
+- 873e734: cleanup
+
 ## 0.2.0
 
 ### Minor Changes

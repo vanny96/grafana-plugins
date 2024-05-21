@@ -1,5 +1,11 @@
 # @yesoreyeram/grafana-go-anyframer
 
+## 0.0.5
+
+### Patch Changes
+
+- 873e734: cleanup
+
 ## 0.0.4
 
 ### Patch Changes

@@ -12,6 +12,8 @@ defaults:
   run:
     shell: bash
     working-directory: ./
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest

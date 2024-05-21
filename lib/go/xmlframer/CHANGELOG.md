@@ -1,5 +1,11 @@
 # @yesoreyeram/grafana-go-xmlframer
 
+## 0.0.7
+
+### Patch Changes
+
+- 873e734: cleanup
+
 ## 0.0.6
 
 ### Patch Changes
