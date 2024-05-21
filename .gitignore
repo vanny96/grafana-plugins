@@ -22,3 +22,6 @@ mage_output_file.go
 # env
 .env
 data/provisioning/datasources/real.yaml
+
+# IDE
+.idea

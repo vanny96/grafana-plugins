@@ -2,10 +2,11 @@ package transformations
 
 import (
 	"errors"
-	"strings"
-
+	"github.com/araddon/dateparse"
 	"github.com/google/uuid"
 	"gopkg.in/Knetic/govaluate.v3"
+	"strings"
+	"time"
 )
 
 var ExpressionFunctions = map[string]govaluate.ExpressionFunction{
@@ -182,5 +183,39 @@ var ExpressionFunctions = map[string]govaluate.ExpressionFunction{
 	"uuid": func(arguments ...any) (any, error) {
 		id := uuid.New()
 		return id.String(), nil
+	},
+	"totime": func(arguments ...any) (any, error) {
+		if len(arguments) < 1 {
+			return nil, errors.New("invalid arguments to todatetime method")
+		}
+		var first *string
+		if arg, ok := arguments[0].(*string); ok {
+			first = arg
+		}
+		if arg, ok := arguments[0].(string); ok {
+			first = &arg
+		}
+
+		if first != nil {
+			return dateparse.ParseAny(*first)
+		}
+		return "", nil
+	},
+	"tomillis": func(arguments ...any) (any, error) {
+		if len(arguments) < 1 {
+			return nil, errors.New("invalid arguments to todatetime method")
+		}
+		var first *time.Time
+		if arg, ok := arguments[0].(*time.Time); ok {
+			first = arg
+		}
+		if arg, ok := arguments[0].(time.Time); ok {
+			first = &arg
+		}
+
+		if first != nil {
+			return first.UnixMilli(), nil
+		}
+		return "", nil
 	},
 }
