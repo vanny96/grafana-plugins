@@ -8,6 +8,11 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
+type Args struct {
+	TimeRange backend.TimeRange
+	User      *backend.User
+}
+
 // ApplyMacros applies macros to the input string based on the provided query and plugin context.
 // It replaces the following macros in the input string:
 //   - ${__from}: Replaced with the start time of the query time range.
@@ -26,8 +31,8 @@ import (
 // Returns:
 //   - The input string with macros replaced.
 //   - An error if there was an error applying the macros.
-func ApplyMacros(input string, query backend.DataQuery, pluginCtx backend.PluginContext) (string, error) {
-	timeRange := query.TimeRange
+func ApplyMacros(input string, args Args) (string, error) {
+	timeRange := args.TimeRange
 	var err error
 	timeMacros := []func(input string, timeRange backend.TimeRange) (string, error){
 		from,     // ${__from}
@@ -41,10 +46,10 @@ func ApplyMacros(input string, query backend.DataQuery, pluginCtx backend.Plugin
 			return input, err
 		}
 	}
-	if pluginCtx.User != nil {
-		input = strings.ReplaceAll(input, "${__user.name}", pluginCtx.User.Name)
-		input = strings.ReplaceAll(input, "${__user.email}", pluginCtx.User.Email)
-		input = strings.ReplaceAll(input, "${__user.login}", pluginCtx.User.Login)
+	if args.User != nil {
+		input = strings.ReplaceAll(input, "${__user.name}", args.User.Name)
+		input = strings.ReplaceAll(input, "${__user.email}", args.User.Email)
+		input = strings.ReplaceAll(input, "${__user.login}", args.User.Login)
 	}
 	return input, nil
 }

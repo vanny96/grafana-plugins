@@ -1,10 +1,9 @@
 # @yesoreyeram/grafana-go-macros
 
-## 0.2.1
+## 0.3.0
 
-### Patch Changes
-
-- 873e734: cleanup
+- Updated macros argument signature
+- cleanup
 
 ## 0.2.0
 
