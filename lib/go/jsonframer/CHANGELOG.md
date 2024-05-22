@@ -1,5 +1,9 @@
 # @yesoreyeram/grafana-go-jsonframer
 
+## 0.2.2
+
+- Support for timeseries in multi framer
+
 ## 0.2.1
 
 - Fixed a bug in JSON multi framer

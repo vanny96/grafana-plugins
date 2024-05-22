@@ -19,6 +19,13 @@ const (
 	FramerTypeSQLite3 FramerType = "sqlite3"
 )
 
+type FrameFormat string
+
+const (
+	FrameFormatTable      FrameFormat = "table"
+	FrameFormatTimeSeries FrameFormat = "timeseries"
+)
+
 type FramerOptions struct {
 	FramerType      FramerType // `gjson` | `sqlite3`
 	SQLite3Query    string
@@ -26,6 +33,7 @@ type FramerOptions struct {
 	RootSelector    string
 	Columns         []ColumnSelector
 	OverrideColumns []ColumnSelector
+	FrameFormat     FrameFormat
 }
 
 type ColumnSelector struct {
@@ -83,6 +91,12 @@ func ToFrames(jsonString string, options FramerOptions) (frames []*data.Frame, e
 				if err != nil {
 					return frames, err
 				}
+				if options.FrameFormat == FrameFormatTimeSeries {
+					frame, err = data.LongToWide(frame, nil)
+					if err != nil {
+						return frames, err
+					}
+				}
 				frames = append(frames, frame)
 			}
 			return frames, err
@@ -90,6 +104,12 @@ func ToFrames(jsonString string, options FramerOptions) (frames []*data.Frame, e
 		frame, err := getFrameFromResponseString(outString, options)
 		if err != nil {
 			return frames, err
+		}
+		if options.FrameFormat == FrameFormatTimeSeries {
+			frame, err = data.LongToWide(frame, nil)
+			if err != nil {
+				return frames, err
+			}
 		}
 		frames = append(frames, frame)
 	}
