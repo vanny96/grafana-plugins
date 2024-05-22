@@ -1,5 +1,9 @@
 # @yesoreyeram/grafana-go-jsonframer
 
+## 0.2.1
+
+- Fixed a bug in JSON multi framer
+
 ## 0.2.0
 
 - Support for multi frames. New function `func ToFrames(jsonString string, options FramerOptions) (frames []*data.Frame, err error)` added to return multi frame response.

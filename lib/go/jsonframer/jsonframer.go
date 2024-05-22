@@ -71,7 +71,7 @@ func ToFrames(jsonString string, options FramerOptions) (frames []*data.Frame, e
 				}
 			}
 			if nonArrayItemsFound {
-				frame, err := getFrameFromResponseString(jsonString, options)
+				frame, err := getFrameFromResponseString(outString, options)
 				if err != nil {
 					return frames, err
 				}
