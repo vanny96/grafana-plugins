@@ -352,30 +352,89 @@ func TestAzureFrame(t *testing.T) {
 }
 
 func TestCloudFrameFrames(t *testing.T) {
-	fileContent, err := os.ReadFile("./testdata/cloudflare/dns_analytics.json")
-	require.Nil(t, err)
-	options := jsonframer.FramerOptions{
-		RootSelector: `$map($.result.query.metrics,function($metric_name,$metric_name_index){
-			$map($.result.data,function($data,$data_index){
-				$map($.result.time_intervals, function($time, $time_index){
-					$merge([
-						{ 'time': $time[0] },
-						{ $metric_name: ($data.metrics[$metric_name_index])[$time_index]},
-						$map($.result.query.dimensions, function($dname, $dname_index){{$dname: $data.dimensions[$dname_index]}})
-					]) 
+	t.Run("DNS analytics", func(t *testing.T) {
+		fileContent, err := os.ReadFile("./testdata/cloudflare/dns_analytics.json")
+		require.Nil(t, err)
+		options := jsonframer.FramerOptions{
+			RootSelector: `$map($.result.query.metrics,function($metric_name,$metric_name_index){
+				$map($.result.data,function($data,$data_index){
+					$map($.result.time_intervals, function($time, $time_index){
+						$merge([
+							{ 'time': $time[0] },
+							{ $metric_name: ($data.metrics[$metric_name_index])[$time_index]},
+							$map($.result.query.dimensions, function($dname, $dname_index){{$dname: $data.dimensions[$dname_index]}})
+						]) 
+					})
 				})
-			})
-		}).$`,
-		OverrideColumns: []jsonframer.ColumnSelector{
-			{Selector: "time", Type: "timestamp"},
-		},
-		FrameFormat: jsonframer.FrameFormatTimeSeries,
-	}
-	var out interface{}
-	err = json.Unmarshal(fileContent, &out)
-	require.Nil(t, err)
-	gotFrame, err := jsonframer.ToFrames(string(fileContent), options)
-	require.Nil(t, err)
-	require.NotNil(t, gotFrame)
-	experimental.CheckGoldenJSONResponse(t, "./testdata/cloudflare/", "dns_analytics", &backend.DataResponse{Frames: gotFrame}, true)
+			}).$`,
+			OverrideColumns: []jsonframer.ColumnSelector{
+				{Selector: "time", Type: "timestamp"},
+			},
+			FrameFormat: jsonframer.FrameFormatTimeSeries,
+		}
+		var out interface{}
+		err = json.Unmarshal(fileContent, &out)
+		require.Nil(t, err)
+		gotFrame, err := jsonframer.ToFrames(string(fileContent), options)
+		require.Nil(t, err)
+		require.NotNil(t, gotFrame)
+		experimental.CheckGoldenJSONResponse(t, "./testdata/cloudflare/", "dns_analytics", &backend.DataResponse{Frames: gotFrame}, true)
+	})
+	t.Run("DNS analytics without dimensions", func(t *testing.T) {
+		fileContent, err := os.ReadFile("./testdata/cloudflare/dns_analytics_nodimensions.json")
+		require.Nil(t, err)
+		options := jsonframer.FramerOptions{
+			RootSelector: `$map($.result.query.metrics,function($metric_name,$metric_name_index){
+				$map($.result.data,function($data,$data_index){
+					$map($.result.time_intervals, function($time, $time_index){
+						$merge([
+							{ 'time': $time[0] },
+							{ $metric_name: ($data.metrics[$metric_name_index])[$time_index]},
+							$map($.result.query.dimensions, function($dname, $dname_index){{$dname: $data.dimensions[$dname_index]}})
+						]) 
+					})
+				})
+			}).$`,
+			OverrideColumns: []jsonframer.ColumnSelector{
+				{Selector: "time", Type: "timestamp"},
+			},
+			FrameFormat: jsonframer.FrameFormatTimeSeries,
+		}
+		var out interface{}
+		err = json.Unmarshal(fileContent, &out)
+		require.Nil(t, err)
+		gotFrame, err := jsonframer.ToFrames(string(fileContent), options)
+		require.Nil(t, err)
+		require.NotNil(t, gotFrame)
+		experimental.CheckGoldenJSONResponse(t, "./testdata/cloudflare/", "dns_analytics_nodimensions", &backend.DataResponse{Frames: gotFrame}, true)
+	})
+	t.Run("DNS analytics single metric", func(t *testing.T) {
+		fileContent, err := os.ReadFile("./testdata/cloudflare/dns_analytics_single_metric.json")
+		require.Nil(t, err)
+		options := jsonframer.FramerOptions{
+			RootSelector: `$map($.result.query.metrics,function($metric_name,$metric_name_index){
+				$map($.result.data,function($data,$data_index){
+					$map($.result.time_intervals, function($time, $time_index){
+						$merge([
+							{ 'time': $time[0] },
+							{ $metric_name: ($data.metrics[$metric_name_index])[$time_index]},
+							$map($.result.query.dimensions, function($dname, $dname_index){{$dname: $data.dimensions[$dname_index]}})
+						]) 
+					})
+				})
+			}).$`,
+			OverrideColumns: []jsonframer.ColumnSelector{
+				{Selector: "time", Type: "timestamp"},
+			},
+			FrameFormat: jsonframer.FrameFormatTimeSeries,
+		}
+		var out interface{}
+		err = json.Unmarshal(fileContent, &out)
+		require.Nil(t, err)
+		gotFrame, err := jsonframer.ToFrames(string(fileContent), options)
+		require.Nil(t, err)
+		require.NotNil(t, gotFrame)
+		experimental.CheckGoldenJSONResponse(t, "./testdata/cloudflare/", "dns_analytics_single_metric", &backend.DataResponse{Frames: gotFrame}, true)
+	})
+
 }

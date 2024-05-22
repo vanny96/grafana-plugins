@@ -91,13 +91,16 @@ func ToFrames(jsonString string, options FramerOptions) (frames []*data.Frame, e
 				if err != nil {
 					return frames, err
 				}
-				if options.FrameFormat == FrameFormatTimeSeries {
-					frame, err = data.LongToWide(frame, nil)
-					if err != nil {
-						return frames, err
+				if frame != nil {
+
+					if options.FrameFormat == FrameFormatTimeSeries && frame.TimeSeriesSchema().Type == data.TimeSeriesTypeLong {
+						frame, err = data.LongToWide(frame, nil)
+						if err != nil {
+							return frames, err
+						}
 					}
+					frames = append(frames, frame)
 				}
-				frames = append(frames, frame)
 			}
 			return frames, err
 		}
@@ -105,13 +108,16 @@ func ToFrames(jsonString string, options FramerOptions) (frames []*data.Frame, e
 		if err != nil {
 			return frames, err
 		}
-		if options.FrameFormat == FrameFormatTimeSeries {
-			frame, err = data.LongToWide(frame, nil)
-			if err != nil {
-				return frames, err
+		if frame != nil {
+
+			if options.FrameFormat == FrameFormatTimeSeries && frame.TimeSeriesSchema().Type == data.TimeSeriesTypeLong {
+				frame, err = data.LongToWide(frame, nil)
+				if err != nil {
+					return frames, err
+				}
 			}
+			frames = append(frames, frame)
 		}
-		frames = append(frames, frame)
 	}
 	return frames, err
 }
