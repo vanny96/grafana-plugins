@@ -35,12 +35,71 @@ type ColumnSelector struct {
 	TimeFormat string
 }
 
-func ToFrame(jsonString string, options FramerOptions) (frame *data.Frame, err error) {
-	if strings.Trim(jsonString, " ") == "" {
-		return frame, errors.New("empty json received")
+func validateJson(jsonString string) (err error) {
+	if strings.TrimSpace(jsonString) == "" {
+		return errors.New("empty json received")
 	}
 	if !gjson.Valid(jsonString) {
-		return frame, errors.New("invalid json response received")
+		return errors.New("invalid json response received")
+	}
+	return err
+}
+
+func ToFrames(jsonString string, options FramerOptions) (frames []*data.Frame, err error) {
+	err = validateJson(jsonString)
+	if err != nil {
+		return frames, err
+	}
+	switch options.FramerType {
+	case "sqlite3":
+		return frames, errors.New("multi frame support not implemented for sqlite3 parser")
+	default:
+		outString, err := GetRootData(jsonString, options.RootSelector)
+		if err != nil {
+			return frames, err
+		}
+		outString, err = getColumnValuesFromResponseString(outString, options.Columns)
+		if err != nil {
+			return frames, err
+		}
+		result := gjson.Parse(outString)
+		if result.IsArray() {
+			nonArrayItemsFound := false
+			for _, item := range result.Array() {
+				if item.Exists() && !item.IsArray() {
+					nonArrayItemsFound = true
+				}
+			}
+			if nonArrayItemsFound {
+				frame, err := getFrameFromResponseString(jsonString, options)
+				if err != nil {
+					return frames, err
+				}
+				frames = append(frames, frame)
+				return frames, err
+			}
+			for _, v := range result.Array() {
+				frame, err := getFrameFromResponseString(v.Raw, options)
+				if err != nil {
+					return frames, err
+				}
+				frames = append(frames, frame)
+			}
+			return frames, err
+		}
+		frame, err := getFrameFromResponseString(outString, options)
+		if err != nil {
+			return frames, err
+		}
+		frames = append(frames, frame)
+	}
+	return frames, err
+}
+
+func ToFrame(jsonString string, options FramerOptions) (frame *data.Frame, err error) {
+	err = validateJson(jsonString)
+	if err != nil {
+		return frame, err
 	}
 	outString := jsonString
 	switch options.FramerType {
@@ -82,7 +141,6 @@ func GetRootData(jsonString string, rootSelector string) (string, error) {
 			}
 		}
 		return "", errors.New("root object doesn't exist in the response. Root selector:" + rootSelector)
-
 	}
 	return jsonString, nil
 

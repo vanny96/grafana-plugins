@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/grafana/grafana-plugin-sdk-go/experimental"
 	"github.com/stretchr/testify/require"
@@ -289,6 +290,44 @@ func TestJsonStringToFrame(t *testing.T) {
 			experimental.CheckGoldenJSONFrame(t, "testdata", goldenFileName, gotFrame, updateTestData)
 		})
 	}
+}
+
+func TestJsonStringToMultiFrame(t *testing.T) {
+	t.Run("array of arrays", func(t *testing.T) {
+		frames, err := jsonframer.ToFrames(`[
+			[
+				{"name": "foo", "age": 2},
+				{"name": "bar", "age": 3}
+			],[
+				{"name": "foo", "salary": 2430 },
+				{"name": "foo", "salary": 3000 }
+			]
+		]`, jsonframer.FramerOptions{})
+		require.Nil(t, err)
+		require.NotNil(t, frames)
+		experimental.CheckGoldenJSONResponse(t, "testdata/multiframer", "array-of-array", &backend.DataResponse{Frames: frames}, true)
+	})
+	t.Run("array of objects", func(t *testing.T) {
+		frames, err := jsonframer.ToFrames(`[
+				{"name": "foo", "age": 2},
+				{"name": "bar", "age": 3}
+		]`, jsonframer.FramerOptions{})
+		require.Nil(t, err)
+		require.NotNil(t, frames)
+		experimental.CheckGoldenJSONResponse(t, "testdata/multiframer", "array-of-objects", &backend.DataResponse{Frames: frames}, true)
+	})
+	t.Run("array of items", func(t *testing.T) {
+		frames, err := jsonframer.ToFrames(`["foo","bar"]`, jsonframer.FramerOptions{FrameName: "result"})
+		require.Nil(t, err)
+		require.NotNil(t, frames)
+		experimental.CheckGoldenJSONResponse(t, "testdata/multiframer", "array-of-items", &backend.DataResponse{Frames: frames}, true)
+	})
+	t.Run("regular object", func(t *testing.T) {
+		frames, err := jsonframer.ToFrames(`{"name": "foo", "age": 2, "salary": 2430}`, jsonframer.FramerOptions{})
+		require.Nil(t, err)
+		require.NotNil(t, frames)
+		experimental.CheckGoldenJSONResponse(t, "testdata/multiframer", "regular-object", &backend.DataResponse{Frames: frames}, true)
+	})
 }
 
 func TestAzureFrame(t *testing.T) {

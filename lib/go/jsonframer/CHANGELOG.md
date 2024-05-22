@@ -1,31 +1,25 @@
 # @yesoreyeram/grafana-go-jsonframer
 
-## 0.1.1
+## 0.2.0
 
-### Patch Changes
+- Support for multi frames. New function `func ToFrames(jsonString string, options FramerOptions) (frames []*data.Frame, err error)` added to return multi frame response.
+
+## 0.1.1
 
 - 873e734: cleanup
 
 ## 0.1.0
 
-### Minor Changes
-
 - Allow column overrides
 
 ## 0.0.5
-
-### Patch Changes
 
 - replaced the backend package `blues/jsonata-go` to `xiatechs/jsonata-go`
 
 ## 0.0.4
 
-### Patch Changes
-
 - 🐛 **Chore**: updated build dependency turbo to 1.10.6
 
 ## 0.0.3
-
-### Patch Changes
 
 - 🐛 **Chore**: Fixed an issue with the github actions
