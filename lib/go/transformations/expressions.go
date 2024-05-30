@@ -219,7 +219,7 @@ var ExpressionFunctions = map[string]govaluate.ExpressionFunction{
 			first = &arg
 		}
 		if first != nil {
-			return first.UnixMilli(), nil
+			return (float64)(first.UnixMilli()), nil
 		}
 		return nil, nil
 	},
