@@ -26,6 +26,11 @@ func TestGetFrameWithComputedColumns(t *testing.T) {
 			columns: []transformations.ComputedColumn{{Selector: "[Cylinders] + horsepower", Text: "power"}},
 			output:  data.NewFrame("sample", data.NewField("Cylinders", nil, []*float64{toFP(1), toFP(2)}), data.NewField("Horsepower", nil, []*float64{toFP(2.3), toFP(4.5)}), data.NewField("power", nil, []*float64{toFP(3.3), toFP(6.5)})),
 		},
+		{
+			input:   data.NewFrame("sample", data.NewField("Date", nil, []*string{toSP("2020-01-01T00:00:00.000Z")})),
+			columns: []transformations.ComputedColumn{{Selector: "tomillis(totime(Date))", Text: "DateAsMillis"}},
+			output:  data.NewFrame("sample", data.NewField("Date", nil, []*string{toSP("2020-01-01T00:00:00.000Z")}), data.NewField("DateAsMillis", nil, []*float64{toFP(1577836800000)})),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -38,5 +43,9 @@ func TestGetFrameWithComputedColumns(t *testing.T) {
 }
 
 func toFP(v float64) *float64 {
+	return &v
+}
+
+func toSP(v string) *string {
 	return &v
 }
