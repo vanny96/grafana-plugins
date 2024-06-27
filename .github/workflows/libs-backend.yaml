@@ -39,4 +39,4 @@ jobs:
           echo "-------- go version -----"
           go version
       - name: Test backend
-        run: npx --package=turbo@latest -- turbo test:backend
+        run: npx --package=turbo@2.0.5 -- turbo test:backend

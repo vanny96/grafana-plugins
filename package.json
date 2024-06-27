@@ -19,10 +19,11 @@
     "lint": "turbo run lint:backend lint:frontend",
     "spellcheck": "cspell -c cspell.config.json \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\""
   },
+  "packageManager": "yarn@1.22.22",
   "dependencies": {},
   "devDependencies": {
     "@changesets/cli": "^2.27.3",
     "cspell": "^8.8.1",
-    "turbo": "^1.13.3"
+    "turbo": "2.0.5"
   }
 }
