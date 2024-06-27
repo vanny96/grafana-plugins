@@ -154,19 +154,25 @@ func GetRootData(jsonString string, rootSelector string) (string, error) {
 		if r.Exists() {
 			return r.String(), nil
 		}
-		if e := jsonata.MustCompile(rootSelector); e != nil {
-			var data interface{}
-			err := json.Unmarshal([]byte(jsonString), &data)
-			if err != nil {
-				return "", err
-			}
-			if res, err := e.Eval(data); err == nil {
-				if r, err := json.Marshal(res); err == nil {
-					return string(r), nil
-				}
-			}
+		expr := jsonata.MustCompile(rootSelector)
+		if expr == nil {
+			err := errors.New("invalid root selector:" + rootSelector)
+			return "", errors.Join(ErrInvalidRootSelector, err)
 		}
-		return "", errors.New("root object doesn't exist in the response. Root selector:" + rootSelector)
+		var data interface{}
+		err := json.Unmarshal([]byte(jsonString), &data)
+		if err != nil {
+			return "", errors.Join(ErrInvalidJSONContent, err)
+		}
+		res, err := expr.Eval(data)
+		if err != nil {
+			return "", errors.Join(ErrEvaluatingJSONata, err)
+		}
+		r2, err := json.Marshal(res)
+		if err != nil {
+			return "", errors.Join(ErrInvalidJSONContent, err)
+		}
+		return string(r2), nil
 	}
 	return jsonString, nil
 
